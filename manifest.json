@@ -1,18 +1,21 @@
-{
-  "manifest_version": 3,
-  "name": "YouTube Recommendation Filter",
-  "description": "Filter YouTube recommendations by video length.",
-  "version": "1.0",
-  "browser_action": {
-      "default_popup": "popup.html"
+{  
+  "name": "Youtube filter",
+  "version": "0.1.0",
+  "description": "Filters youtube recommendations by length",
+  "permissions": ["storage", "tabs"],
+  "host_permissions": ["https://*.youtube.com/*"],
+  "background": {
+    "service_worker": "background.js"
   },
-  "permissions": [
-      "activeTab",
-      "https://www.youtube.com/*"
+  "content_scripts": [
+    {
+      "matches": ["https://*.youtube.com/*"],
+      "js": ["contentScript.js"]
+    }
   ],
-  "content_scripts": [{
-    "matches": ["https://www.youtube.com/*"],
-    "js": ["content.js"]
-  }]
-
+  "action": {
+    "default_title": "My YT Bookmarks",
+    "default_popup": "popup.html"
+  },
+  "manifest_version": 3
 }
