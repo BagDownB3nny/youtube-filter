@@ -8,13 +8,21 @@
                 for(let mutation of mutationsList) {
                     // If the addedNodes property has one or more nodes
                     if(mutation.addedNodes.length) {
-                        let recommendationElements = document.querySelectorAll('#dismissible');
-                        recommendationElements.forEach((element) => {
-                            if (isFilterable(element)) {
-                                console.log(element);
-                                element.remove();
+                        // console.log(mutation.addedNodes);
+                        // let recommendationElements = document.querySelectorAll('#dismissible');
+                        // recommendationElements.forEach((element) => {
+                        //     if (isFilterable(element)) {
+                        //         console.log(element);
+                        //         element.remove();
+                        //     }
+                        // });
+                        for (let node of mutation.addedNodes) {
+                            if (node.nodeType === Node.ELEMENT_NODE && node.id === 'dismissible') {
+                                if (isFilterable(node)) {
+                                    node.remove();
+                                }
                             }
-                        });
+                        }
                     }
                 }
             });
@@ -35,7 +43,7 @@ function isFilterable(element) {
     const timeString = timeElement.innerText;
     const time = getTime(timeString);
     if (time < minTime) {
-        const title = element.querySelectorAll('#video-title-link')[0].ariaLabel;
+        const title = element.querySelectorAll('#video-title')[0].ariaLabel;
         console.log(timeString, time, title);
         return true;
     } else {
