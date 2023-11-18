@@ -1,4 +1,17 @@
 (() => {
+
+    const filterElements = () => {
+        const recommendationElements = document.querySelectorAll('#dismissible');
+        recommendationElements.forEach((element) => {
+            if (isFilterable(element)) {
+                element.remove();
+            }
+        });
+    };
+ 
+    // Run the function when the page loads
+    filterElements();
+
     chrome.runtime.onMessage.addListener((obj, sender, response) => {
         const { type, value } = obj;
 
