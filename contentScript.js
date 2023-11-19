@@ -1,34 +1,27 @@
 (() => {
-
-    const filterElements = () => {
-        const recommendationElements = document.querySelectorAll('#dismissible');
-        recommendationElements.forEach((element) => {
-            if (isFilterable(element)) {
-                element.remove();
-            }
-        });
-    };
- 
-    // Run the function when the page loads
-    filterElements();
-
     chrome.runtime.onMessage.addListener((obj, sender, response) => {
         const { type, value } = obj;
 
         if (type === "HOME") {
+
+            const filterElements = () => {
+                console.log("looking for elements")
+                const recommendationElements = document.querySelectorAll('#dismissible');
+                recommendationElements.forEach((element) => {
+                    if (isFilterable(element)) {
+                        element.remove();
+                    }
+                });
+            };
+         
+            // Run the function when the page loads
+            filterElements();
+
             const observer = new MutationObserver((mutationsList, observer) => {
                 // Look through all mutations that just occured
                 for(let mutation of mutationsList) {
                     // If the addedNodes property has one or more nodes
                     if(mutation.addedNodes.length) {
-                        // console.log(mutation.addedNodes);
-                        // let recommendationElements = document.querySelectorAll('#dismissible');
-                        // recommendationElements.forEach((element) => {
-                        //     if (isFilterable(element)) {
-                        //         console.log(element);
-                        //         element.remove();
-                        //     }
-                        // });
                         for (let node of mutation.addedNodes) {
                             if (node.nodeType === Node.ELEMENT_NODE && node.id === 'dismissible') {
                                 if (isFilterable(node)) {
@@ -57,7 +50,7 @@ function isFilterable(element) {
     const time = getTime(timeString);
     if (time < minTime) {
         const title = element.querySelectorAll('#video-title')[0].ariaLabel;
-        console.log(timeString, time, title);
+        console.log(`Removing ${title} with time ${timeString}`)
         return true;
     } else {
         return false;
