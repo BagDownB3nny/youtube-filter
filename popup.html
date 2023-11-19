@@ -1,9 +1,22 @@
 <!doctype html>
 <html>
+  <script src="popup.js"></script>
   <head>
     <title>YouTube Recommendation Filter</title>
   </head>
+  <style>
+    body {
+      width: 250px;
+      height: 100px;
+    }
+  </style>
   <body>
-    <h1>YouTube Recommendation Filter</h1>
+    <h1>YouTube Filter</h1>
+    <label for="minTimeInput">Filter out all videos shorter than:</label>
+    <input id="minutesInput" type="number" min="0" step="1" value="3">
+    <span>minutes</span>
+    <input id="secondsInput" type="number" min="0" step="1" value="0">
+    <span>seconds</span>    
+    <button id="saveButton">Save</button>
   </body>
 </html>

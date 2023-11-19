@@ -15,7 +15,8 @@
   ],
   "action": {
     "default_title": "My YT Bookmarks",
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_script": "popup.js"
   },
   "manifest_version": 3
 }

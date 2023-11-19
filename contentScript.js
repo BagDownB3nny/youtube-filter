@@ -1,14 +1,15 @@
 (() => {
     chrome.runtime.onMessage.addListener((obj, sender, response) => {
-        const { type, value } = obj;
+        const { type, value, minTime } = obj;
 
+        console.log(minTime);
         if (type === "HOME") {
 
             const filterElements = () => {
                 console.log("looking for elements")
                 const recommendationElements = document.querySelectorAll('#dismissible');
                 recommendationElements.forEach((element) => {
-                    if (isFilterable(element)) {
+                    if (isFilterable(element, minTime)) {
                         element.remove();
                     }
                 });
@@ -24,9 +25,11 @@
                     if(mutation.addedNodes.length) {
                         for (let node of mutation.addedNodes) {
                             if (node.nodeType === Node.ELEMENT_NODE && node.id === 'dismissible') {
-                                if (isFilterable(node)) {
-                                    node.remove();
-                                }
+                                waitForTimeElementToExist(node).then(() => {
+                                    if (isFilterable(node, minTime)) {
+                                        node.remove();
+                                    }
+                                });
                             }
                         }
                     }
@@ -39,8 +42,7 @@
     });
 })();
 
-function isFilterable(element) {
-    const minTime = 180;
+function isFilterable(element, minTime) {
 
     timeElement =  element.querySelectorAll('#time-status #text')[0];
     if (!timeElement) {
@@ -73,4 +75,23 @@ function getTime(time) {
         timeInSeconds += parseInt(hours) * 3600;
     }
     return timeInSeconds;
+}
+
+
+function waitForTimeElementToExist(node) {
+    return new Promise(resolve => {
+        if (node.querySelector("#time-status #text")) {
+            return resolve();
+        }
+        const observer = new MutationObserver(() => {
+            if (node.querySelector("#time-status #text")) {
+                resolve();
+                observer.disconnect();
+            }
+        });
+        observer.observe(node, {
+            subtree: true,
+            childList: true,
+        });
+    });
 }
