@@ -5,18 +5,28 @@
         console.log(minTime);
         if (type === "HOME") {
 
-            const filterElements = () => {
+            const filterInitialElements = () => {
                 console.log("looking for elements")
                 const recommendationElements = document.querySelectorAll('#dismissible');
                 recommendationElements.forEach((element) => {
                     if (isFilterable(element, minTime)) {
+                        console.log("Removed during initial load");
                         element.remove();
                     }
                 });
             };
          
-            // Run the function when the page loads
-            filterElements();
+
+            // Run the function after a 2 second delay
+
+
+            setTimeout(filterInitialElements, 2000);
+            setTimeout(filterInitialElements, 3000);
+            setTimeout(filterInitialElements, 4000);
+            setTimeout(filterInitialElements, 5000);
+            setTimeout(filterInitialElements, 6000);
+            setTimeout(filterInitialElements, 7000);
+            setTimeout(filterInitialElements, 8000);
 
             const observer = new MutationObserver((mutationsList, observer) => {
                 // Look through all mutations that just occured
