@@ -1,6 +1,10 @@
+import { isFilterable } from "./src/filterService";
+import { settings } from "./src/storageService";
+
 (() => {
     chrome.runtime.onMessage.addListener((obj, sender, response) => {
-        const { type, value, minTime } = obj;
+        const { type, value } = obj;
+        const minTime = settings.minTime;
 
         console.log(minTime);
         if (type === "HOME") {
@@ -51,41 +55,6 @@
         }
     });
 })();
-
-function isFilterable(element, minTime) {
-
-    timeElement =  element.querySelectorAll('#time-status #text')[0];
-    if (!timeElement) {
-        return false;
-    }
-    const timeString = timeElement.innerText;
-    const time = getTime(timeString);
-    if (time < minTime) {
-        const title = element.querySelectorAll('#video-title')[0].ariaLabel;
-        console.log(`Removing ${title} with time ${timeString}`)
-        return true;
-    } else {
-        return false;
-    }
-}
-
-function getTime(time) {
-    const timeArr = time.split(':');
-    const seconds = timeArr[timeArr.length - 1];
-    const minutes = timeArr[timeArr.length - 2];
-    const hours = timeArr[timeArr.length - 3];
-    let timeInSeconds = 0;
-    if (seconds) {
-        timeInSeconds += parseInt(seconds);
-    }
-    if (minutes) {
-        timeInSeconds += parseInt(minutes) * 60;
-    }
-    if (hours) {
-        timeInSeconds += parseInt(hours) * 3600;
-    }
-    return timeInSeconds;
-}
 
 
 function waitForTimeElementToExist(node) {

@@ -1,10 +1,15 @@
-// Save minTime to chrome storage when save button is clicked
-document.addEventListener('DOMContentLoaded', (event) => {
-    document.getElementById('saveButton').addEventListener('click', () => {
+import { fetchSettingsFromStorage, setMinTime, getMinTime } from './src/storageService.js';
+
+document.addEventListener('DOMContentLoaded', async (event) => {
+    await fetchSettingsFromStorage();
+    const  { minutes, seconds } = getMinTime();
+    console.log(getMinTime());
+    console.log(minutes, seconds);
+    document.getElementById('minutesInput').value = minutes || 3;
+    document.getElementById('secondsInput').value = seconds || 0;
+    document.getElementById('saveButton').addEventListener('click', async () => {
         const minTime = calculateTotalTime();
-        chrome.storage.sync.set({minTime: minTime}, function() {
-            console.log('minTime is set to ' + minTime);
-        });
+        await setMinTime(minTime);
     });
 }); 
 
@@ -14,11 +19,3 @@ function calculateTotalTime() {
     const totalTimeInSeconds = minutes * 60 + parseInt(seconds);
     return totalTimeInSeconds;
 }
- 
-// Get minTime from chrome storage, and display in the input box
-chrome.storage.sync.get(['minTime'], function(result) {
-    const minutes = Math.floor(result.minTime / 60);
-    const seconds = result.minTime % 60;
-    document.getElementById('minutesInput').value = minutes || 3;
-    document.getElementById('secondsInput').value = seconds || 0;
-}); 

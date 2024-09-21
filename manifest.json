@@ -1,16 +1,17 @@
-{  
-  "name": "Youtube filter",
+{
+  "name": "Youtube filter (DEV)",
   "version": "0.1.0",
   "description": "Filters youtube recommendations by length",
   "permissions": ["storage", "tabs"],
   "host_permissions": ["https://*.youtube.com/*"],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "content_scripts": [
     {
       "matches": ["https://*.youtube.com/*"],
-      "js": ["contentScript.js"]
+      "js": ["main.js"]
     }
   ],
   "action": {
